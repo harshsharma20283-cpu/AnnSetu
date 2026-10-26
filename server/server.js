@@ -12,8 +12,7 @@ const supabase = createClient(
   process.env.SUPABASE_SECRET_KEY
 );
 
-app.get("/", (req, res) => res.send("Fridge Tracker API chal raha hai"));
-
+app.get("/", (req, res) => res.send("AnnSetu API chal raha hai"));
 // Test route: database se baat ho rahi hai ya nahi
 app.get("/test-db", async (req, res) => {
   const { count, error } = await supabase
