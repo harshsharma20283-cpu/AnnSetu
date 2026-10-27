@@ -1,19 +1,16 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const { createClient } = require("@supabase/supabase-js");
+const supabase = require("./supabaseClient");
+const itemsRouter = require("./routes/items");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SECRET_KEY
-);
+app.get("/", (req, res) => res.send("AnnSetu API is running"));
 
-app.get("/", (req, res) => res.send("AnnSetu API chal raha hai"));
-// Test route: database se baat ho rahi hai ya nahi
+// Test route: checks whether the database connection works
 app.get("/test-db", async (req, res) => {
   const { count, error } = await supabase
     .from("items")
@@ -23,5 +20,13 @@ app.get("/test-db", async (req, res) => {
   res.json({ ok: true, itemsCount: count });
 });
 
+app.use("/items", itemsRouter);
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server port ${PORT} pe chal raha hai`));
+app.listen(PORT, (err) => {
+  if (err) {
+    console.error("Server failed to start:", err.message);
+    process.exit(1);
+  }
+  console.log(`Server running on port ${PORT}`);
+});
