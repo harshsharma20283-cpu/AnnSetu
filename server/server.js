@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const supabase = require("./supabaseClient");
 const itemsRouter = require("./routes/items");
+const shelfLifeRouter = require("./routes/shelfLife");
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.get("/test-db", async (req, res) => {
 });
 
 app.use("/items", itemsRouter);
+app.use("/shelf-life", shelfLifeRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, (err) => {
