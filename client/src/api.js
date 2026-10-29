@@ -61,14 +61,12 @@ export function logoutUser() {
 
 export async function getGoogleAuthUrl() {
   const redirectUri = window.location.origin;
-  try {
-    const res = await fetch(`${API_BASE}/auth/google?redirect_to=${encodeURIComponent(redirectUri)}`);
-    const data = await res.json();
-    if (res.ok && data.url) return data.url;
-  } catch (err) {
-    console.warn('Backend google auth url failed, using direct Supabase URL fallback:', err);
+  const res = await fetch(`${API_BASE}/auth/google?redirect_to=${encodeURIComponent(redirectUri)}`);
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(data.error || 'Google login is not available');
   }
-  return `https://dwuudsgauyrjgtqypvrm.supabase.co/auth/v1/authorize?provider=google&redirect_to=${encodeURIComponent(redirectUri)}`;
+  return data.url;
 }
 
 export async function handleOAuthCallback({ accessToken, code }) {

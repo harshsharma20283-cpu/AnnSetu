@@ -135,6 +135,18 @@ router.get("/google", async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    // Pre-flight check: verify whether Google provider is active in Supabase
+    const probe = await fetch(data.url, { redirect: "manual" });
+    if (probe.status === 400) {
+      const errBody = await probe.json().catch(() => ({}));
+      if (errBody.msg && errBody.msg.includes("provider is not enabled")) {
+        return res.status(400).json({
+          error: "Google Provider is not enabled in your Supabase project yet. Please enable Google under Authentication -> Providers in Supabase, or sign up below with Email & Password!",
+          providerNotEnabled: true,
+        });
+      }
+    }
+
     res.json({ ok: true, url: data.url });
   } catch (err) {
     res.status(500).json({ error: err.message });
