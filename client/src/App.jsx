@@ -212,6 +212,7 @@ export default function App() {
                   <HomeTab
                     items={filteredItems}
                     usedItems={usedItems}
+                    currentUser={currentUser}
                     onNavigate={(tab) => {
                       setActiveTab(tab);
                       scrollToDashboard();
@@ -296,6 +297,7 @@ export default function App() {
         isOpen={isCookOpen}
         onClose={() => setIsCookOpen(false)}
         items={items}
+        onMarkUsed={handleMarkUsed}
       />
 
       <BarcodeLookupModal

@@ -1,7 +1,19 @@
 const express = require("express");
+const shelfLifeData = require("../data/shelfLife.json");
 const { LOCATIONS, findItem, estimateExpiry } = require("../utils/shelfLife");
 
 const router = express.Router();
+
+// GET /shelf-life/categories : list unique categories
+router.get("/categories", (req, res) => {
+  const categories = [...new Set(shelfLifeData.map((it) => it.category))];
+  res.json(categories);
+});
+
+// GET /shelf-life/items : list all pantry shelf life items
+router.get("/items", (req, res) => {
+  res.json(shelfLifeData);
+});
 
 // GET /shelf-life/suggest?q=pan : autocomplete suggestions
 router.get("/suggest", (req, res) => {

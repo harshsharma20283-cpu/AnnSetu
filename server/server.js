@@ -28,7 +28,12 @@ app.get("/test-db", async (req, res) => {
     .select("*", { count: "exact", head: true });
 
   if (error) return res.status(500).json({ ok: false, error: error.message });
-  res.json({ ok: true, itemsCount: count });
+  res.json({ 
+    ok: true, 
+    itemsCount: count,
+    keyPrefix: process.env.SUPABASE_SECRET_KEY ? process.env.SUPABASE_SECRET_KEY.slice(0, 10) : 'none',
+    url: process.env.SUPABASE_URL 
+  });
 });
 
 // App Endpoints

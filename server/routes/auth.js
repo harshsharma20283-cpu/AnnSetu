@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const supabase = require("../supabaseClient");
+const { createAuthClient } = require("../supabaseClient");
 const { JWT_SECRET, requireAuth } = require("../middleware/auth");
 
 const router = express.Router();
@@ -43,7 +44,8 @@ router.post("/register", async (req, res) => {
 
     // Fallback to standard signUp if admin create didn't resolve
     if (!user) {
-      const { data, error } = await supabase.auth.signUp({
+      const authClient = createAuthClient();
+      const { data, error } = await authClient.auth.signUp({
         email: cleanEmail,
         password,
         options: {
@@ -89,7 +91,8 @@ router.post("/login", async (req, res) => {
   }
 
   try {
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const authClient = createAuthClient();
+    const { data, error } = await authClient.auth.signInWithPassword({
       email: email.trim().toLowerCase(),
       password,
     });
@@ -148,15 +151,16 @@ router.post("/oauth-callback", async (req, res) => {
 
   try {
     let user = null;
+    const authClient = createAuthClient();
 
     if (access_token) {
-      const { data, error } = await supabase.auth.getUser(access_token);
+      const { data, error } = await authClient.auth.getUser(access_token);
       if (error || !data?.user) {
         return res.status(401).json({ error: error?.message || "Invalid OAuth access token" });
       }
       user = data.user;
     } else if (code) {
-      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+      const { data, error } = await authClient.auth.exchangeCodeForSession(code);
       if (error || !data?.user) {
         return res.status(401).json({ error: error?.message || "Failed to exchange auth code" });
       }

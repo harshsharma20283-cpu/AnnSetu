@@ -15,6 +15,7 @@ import {
 export default function HomeTab({ 
   items, 
   usedItems, 
+  currentUser,
   onNavigate, 
   onOpenAdd, 
   onOpenBarcode, 
@@ -55,7 +56,7 @@ export default function HomeTab({
       <div>
         <div className="flex items-center gap-2">
           <h1 className="text-2xl sm:text-3xl font-black text-slate-800 tracking-tight">
-            Good Morning, Harsh
+            {currentUser?.name ? `Welcome back, ${currentUser.name.split(' ')[0]}` : 'Welcome, Kitchen Chef'}
           </h1>
           <span className="text-2xl">🌱</span>
         </div>
