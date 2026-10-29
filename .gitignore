@@ -1,2 +1,18 @@
+# Dependencies
 node_modules
+client/node_modules
+server/node_modules
+
+# Build outputs
+client/dist
+dist
+
+# Environment variables
 .env
+*.env.local
+
+# Heavy raw media frames
+client/frames-raw
+client/frames-raw-backup
+*.mp4
+*.gif
