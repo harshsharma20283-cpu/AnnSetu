@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Calendar, Check, Camera, ScanBarcode, ArrowRight, Image as ImageIcon } from 'lucide-react';
+import { Sparkles, Calendar, Check, Camera, ScanBarcode, ArrowRight, Image as ImageIcon, FileText, X } from 'lucide-react';
 import { getShelfLifeSuggestions, estimateItemExpiry, createItem, uploadGroceryPhoto } from '../../api';
+import { performGroceryOCR } from '../../utils/ocrParser';
+import OcrScanModal from '../OcrScanModal';
 import confetti from 'canvas-confetti';
 
 export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = null }) {
@@ -15,6 +17,9 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
   const [price, setPrice] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [ocrScanning, setOcrScanning] = useState(false);
+  const [ocrSuccessMsg, setOcrSuccessMsg] = useState('');
+  const [isOcrModalOpen, setIsOcrModalOpen] = useState(false);
   const [expirySource, setExpirySource] = useState('manual');
   const [estimateDetails, setEstimateDetails] = useState(null);
 
@@ -103,15 +108,66 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
     if (!file) return;
 
     setUploadingPhoto(true);
+    setOcrSuccessMsg('');
     setError('');
 
     try {
+      // 1. Upload photo to server / storage
       const url = await uploadGroceryPhoto(file);
       setPhotoUrl(url);
+
+      // 2. Automatically run OCR to detect Best Before / Expiry Date!
+      setOcrScanning(true);
+      try {
+        const ocrData = await performGroceryOCR(file);
+        if (ocrData.expiryDate) {
+          setExpiryDate(ocrData.expiryDate);
+          setAlertDate(ocrData.expiryDate);
+          setExpirySource('printed');
+          setOcrSuccessMsg(`✨ OCR Auto-Detected Expiry Date: ${ocrData.expiryDate} (from packet: "${ocrData.rawExpiryMatch || 'label'}")`);
+          confetti({ particleCount: 35, spread: 60, origin: { y: 0.6 } });
+        }
+        if (ocrData.mfgDate && !purchaseDate) {
+          setPurchaseDate(ocrData.mfgDate);
+        }
+        if (ocrData.price && !price) {
+          setPrice(String(ocrData.price));
+        }
+        if (ocrData.detectedName && (!name || name.trim() === '')) {
+          setName(ocrData.detectedName);
+        }
+      } catch (ocrErr) {
+        console.warn('Background OCR notice:', ocrErr);
+      } finally {
+        setOcrScanning(false);
+      }
     } catch (err) {
       setError('Photo upload failed: ' + err.message);
     } finally {
       setUploadingPhoto(false);
+    }
+  };
+
+  const handleOcrData = (ocrResult) => {
+    if (!ocrResult) return;
+    if (ocrResult.expiryDate) {
+      setExpiryDate(ocrResult.expiryDate);
+      setAlertDate(ocrResult.expiryDate);
+      setExpirySource('printed');
+      setOcrSuccessMsg(`✨ OCR Auto-Detected Expiry: ${ocrResult.expiryDate}`);
+      confetti({ particleCount: 40, spread: 60, origin: { y: 0.6 } });
+    }
+    if (ocrResult.mfgDate) {
+      setPurchaseDate(ocrResult.mfgDate);
+    }
+    if (ocrResult.price) {
+      setPrice(String(ocrResult.price));
+    }
+    if (ocrResult.name && (!name || name.trim() === '')) {
+      setName(ocrResult.name);
+    }
+    if (ocrResult.image && !photoUrl) {
+      setPhotoUrl(ocrResult.image);
     }
   };
 
@@ -236,11 +292,21 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={uploadingPhoto}
+                disabled={uploadingPhoto || ocrScanning}
                 className="text-xs font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200/80 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 active:scale-95 disabled:opacity-50"
               >
                 <Camera className="w-3.5 h-3.5 text-emerald-700" />
                 <span>{uploadingPhoto ? 'Uploading...' : photoUrl ? 'Change Photo' : 'Upload Photo'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setIsOcrModalOpen(true)}
+                className="text-xs font-bold text-teal-800 bg-teal-100 hover:bg-teal-200/80 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 active:scale-95 shadow-sm"
+                title="Scan packet with AI OCR to auto-detect Best Before / Expiry date"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-teal-700" />
+                <span>AI Scan Packet (OCR)</span>
               </button>
 
               <button
@@ -252,6 +318,27 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
                 <span>Scan Barcode</span>
               </button>
             </div>
+
+            {/* OCR Live Progress / Result Banner */}
+            {ocrScanning && (
+              <div className="mt-2.5 text-xs font-bold text-teal-700 flex items-center gap-2 animate-pulse">
+                <Sparkles className="w-3.5 h-3.5 text-teal-600 animate-spin" />
+                <span>AI OCR reading packet for Best Before / Expiry Date...</span>
+              </div>
+            )}
+
+            {ocrSuccessMsg && (
+              <div className="mt-2.5 p-2.5 rounded-xl bg-teal-50 border border-teal-200 text-xs font-bold text-teal-900 flex items-center justify-between gap-2 animate-in fade-in">
+                <span>{ocrSuccessMsg}</span>
+                <button
+                  type="button"
+                  onClick={() => setOcrSuccessMsg('')}
+                  className="w-5 h-5 rounded-full hover:bg-teal-100 flex items-center justify-center text-teal-700"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
@@ -433,6 +520,13 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
         </button>
 
       </form>
+
+      {/* OCR Scan Modal */}
+      <OcrScanModal
+        isOpen={isOcrModalOpen}
+        onClose={() => setIsOcrModalOpen(false)}
+        onDataDetected={handleOcrData}
+      />
 
     </div>
   );
