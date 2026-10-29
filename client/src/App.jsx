@@ -15,8 +15,16 @@ import ProfileTab from './components/tabs/ProfileTab';
 // Modals
 import CookTodayModal from './components/CookTodayModal';
 import BarcodeLookupModal from './components/BarcodeLookupModal';
+import AuthModal from './components/AuthModal';
 
-import { fetchItems, updateItem, deleteItem } from './api';
+import { 
+  fetchItems, 
+  updateItem, 
+  deleteItem, 
+  getCurrentUser, 
+  logoutUser,
+  handleOAuthCallback 
+} from './api';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
@@ -25,10 +33,12 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [serverOnline, setServerOnline] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentUser, setCurrentUser] = useState(null);
 
   // Modals state
   const [isCookOpen, setIsCookOpen] = useState(false);
   const [isBarcodeOpen, setIsBarcodeOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [barcodeScannedData, setBarcodeScannedData] = useState(null);
 
   const dashboardRef = useRef(null);
@@ -51,8 +61,50 @@ export default function App() {
   };
 
   useEffect(() => {
-    loadData();
+    // Check for Google OAuth callback params in URL
+    const hash = window.location.hash;
+    const search = window.location.search;
+    
+    let accessToken = null;
+    let code = null;
+
+    if (hash && hash.includes('access_token=')) {
+      const params = new URLSearchParams(hash.replace(/^#/, ''));
+      accessToken = params.get('access_token');
+    }
+    if (search && search.includes('code=')) {
+      const params = new URLSearchParams(search);
+      code = params.get('code');
+    }
+
+    if (accessToken || code) {
+      setLoading(true);
+      handleOAuthCallback({ accessToken, code })
+        .then((res) => {
+          if (res?.user) {
+            setCurrentUser(res.user);
+            window.history.replaceState({}, document.title, window.location.pathname);
+            loadData();
+          }
+        })
+        .catch((err) => {
+          console.error('Google OAuth callback failed:', err);
+          window.history.replaceState({}, document.title, window.location.pathname);
+          loadData();
+        });
+    } else {
+      loadData();
+      getCurrentUser().then((user) => {
+        if (user) setCurrentUser(user);
+      }).catch(() => {});
+    }
   }, []);
+
+  const handleLogout = () => {
+    logoutUser();
+    setCurrentUser(null);
+    loadData();
+  };
 
   const handleMarkUsed = async (id) => {
     try {
@@ -124,6 +176,8 @@ export default function App() {
             scrollToDashboard();
           }}
           expiringCount={expiringCount}
+          currentUser={currentUser}
+          onOpenAuth={() => setIsAuthOpen(true)}
         />
 
         {/* Content Area */}
@@ -137,6 +191,12 @@ export default function App() {
             onToggleMobileNav={() => setActiveTab('home')}
             expiringCount={expiringCount}
             onOpenFridge3D={scrollToHero}
+            currentUser={currentUser}
+            onOpenAuth={() => setIsAuthOpen(true)}
+            onNavigateProfile={() => {
+              setActiveTab('profile');
+              scrollToDashboard();
+            }}
           />
 
           {/* Tab Views */}
@@ -209,6 +269,9 @@ export default function App() {
                   <ProfileTab
                     itemsCount={items.length}
                     usedCount={usedItems.length}
+                    currentUser={currentUser}
+                    onOpenAuth={() => setIsAuthOpen(true)}
+                    onLogout={handleLogout}
                   />
                 )}
               </>
@@ -239,6 +302,15 @@ export default function App() {
         isOpen={isBarcodeOpen}
         onClose={() => setIsBarcodeOpen(false)}
         onProductSelected={handleBarcodeProductSelected}
+      />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onAuthSuccess={(user) => {
+          setCurrentUser(user);
+          loadData();
+        }}
       />
 
     </div>

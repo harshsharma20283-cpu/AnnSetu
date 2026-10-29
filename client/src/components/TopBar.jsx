@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, Menu, Sparkles, Refrigerator } from 'lucide-react';
+import { Search, Bell, Menu, Sparkles, Refrigerator, LogIn } from 'lucide-react';
 
 export default function TopBar({ 
   searchQuery, 
@@ -7,7 +7,10 @@ export default function TopBar({
   serverStatus, 
   onToggleMobileNav, 
   expiringCount,
-  onOpenFridge3D
+  onOpenFridge3D,
+  currentUser,
+  onOpenAuth,
+  onNavigateProfile
 }) {
   return (
     <header className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-emerald-950/5 px-6 sm:px-10 py-3.5 flex items-center justify-between gap-4">
@@ -23,7 +26,7 @@ export default function TopBar({
         <span className="text-lg font-black tracking-tight text-slate-800">AnnSetu</span>
       </div>
 
-      {/* Global Search Bar (Matching Mockup) */}
+      {/* Global Search Bar */}
       <div className="relative flex-1 max-w-lg">
         <Search className="w-4 h-4 text-slate-400 absolute left-4 top-3" />
         <input
@@ -62,10 +65,24 @@ export default function TopBar({
           )}
         </div>
 
-        {/* Profile Avatar */}
-        <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-sm">
-          H
-        </div>
+        {/* Profile Avatar or Sign In */}
+        {currentUser ? (
+          <div 
+            onClick={onNavigateProfile}
+            className="cursor-pointer w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-sm uppercase hover:ring-2 hover:ring-emerald-400 transition"
+            title={`Logged in as ${currentUser.name}`}
+          >
+            {currentUser.name ? currentUser.name[0] : 'H'}
+          </div>
+        ) : (
+          <button
+            onClick={onOpenAuth}
+            className="flex items-center gap-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-xl transition shadow-sm active:scale-95"
+          >
+            <LogIn className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Sign In</span>
+          </button>
+        )}
 
       </div>
 

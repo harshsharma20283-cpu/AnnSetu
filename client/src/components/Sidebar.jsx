@@ -7,10 +7,11 @@ import {
   Lightbulb, 
   User, 
   Leaf,
-  ChevronRight
+  ChevronRight,
+  LogIn
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, expiringCount }) {
+export default function Sidebar({ activeTab, setActiveTab, expiringCount, currentUser, onOpenAuth }) {
   const menuItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'fridge', label: 'My Pantry', icon: Layers },
@@ -71,25 +72,43 @@ export default function Sidebar({ activeTab, setActiveTab, expiringCount }) {
       </div>
 
       {/* User Profile Card */}
-      <div 
-        onClick={() => setActiveTab('profile')}
-        className="cursor-pointer p-3.5 rounded-2xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-100 transition-all flex items-center justify-between group"
-      >
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-emerald-600/20">
-            H
+      {currentUser ? (
+        <div 
+          onClick={() => setActiveTab('profile')}
+          className="cursor-pointer p-3.5 rounded-2xl bg-slate-50 hover:bg-emerald-50/60 border border-slate-100 transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-10 h-10 rounded-full bg-emerald-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-emerald-600/20 uppercase">
+              {currentUser.name ? currentUser.name[0] : 'H'}
+            </div>
+            <div className="min-w-0">
+              <span className="text-sm font-bold text-slate-800 block truncate group-hover:text-emerald-700 transition">
+                {currentUser.name || 'Chef'}
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-100/70 px-2 py-0.5 rounded-full inline-block">
+                Premium
+              </span>
+            </div>
           </div>
-          <div className="min-w-0">
-            <span className="text-sm font-bold text-slate-800 block truncate group-hover:text-emerald-700 transition">
-              Harsh
-            </span>
-            <span className="text-[11px] font-semibold text-emerald-600 bg-emerald-100/70 px-2 py-0.5 rounded-full inline-block">
-              Premium
-            </span>
-          </div>
+          <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 group-hover:text-emerald-600 transition" />
         </div>
-        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:translate-x-0.5 group-hover:text-emerald-600 transition" />
-      </div>
+      ) : (
+        <div 
+          onClick={onOpenAuth}
+          className="cursor-pointer p-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100/70 border border-emerald-200/60 transition-all flex items-center justify-between group"
+        >
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold">
+              <LogIn className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-emerald-900 block">Sign In</span>
+              <span className="text-[10px] text-emerald-600 block">Sync Kitchen</span>
+            </div>
+          </div>
+          <ChevronRight className="w-4 h-4 text-emerald-600" />
+        </div>
+      )}
 
     </aside>
   );

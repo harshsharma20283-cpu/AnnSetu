@@ -1,7 +1,7 @@
 import React from 'react';
-import { User, Bell, Sliders, HelpCircle, Info, LogOut, ChevronRight, Award, ShieldCheck, Heart } from 'lucide-react';
+import { User, Bell, Sliders, HelpCircle, Info, LogOut, ChevronRight, Award, ShieldCheck, Heart, LogIn } from 'lucide-react';
 
-export default function ProfileTab({ itemsCount = 0, usedCount = 0 }) {
+export default function ProfileTab({ itemsCount = 0, usedCount = 0, currentUser, onOpenAuth, onLogout }) {
   const menuOptions = [
     { label: 'Personal Information', icon: User },
     { label: 'Notification Settings', icon: Bell },
@@ -23,22 +23,43 @@ export default function ProfileTab({ itemsCount = 0, usedCount = 0 }) {
         </p>
       </div>
 
-      {/* User Card (Matching Mockup exactly) */}
-      <div className="bg-white p-6 sm:p-8 rounded-3xl border border-emerald-950/5 shadow-sm flex items-center justify-between">
-        <div className="flex items-center gap-5">
-          <div className="w-16 h-16 rounded-full bg-emerald-600 text-white font-black text-2xl flex items-center justify-center shadow-lg shadow-emerald-600/25">
-            H
-          </div>
-          <div>
-            <h3 className="text-xl font-black text-slate-800">Harsh</h3>
-            <p className="text-xs text-slate-400">harsh@example.com</p>
-            <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold shadow-sm">
-              <Award className="w-3.5 h-3.5 text-amber-500" />
-              <span>Premium Member</span>
+      {/* User Card */}
+      {currentUser ? (
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-emerald-950/5 shadow-sm flex items-center justify-between">
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 rounded-full bg-emerald-600 text-white font-black text-2xl flex items-center justify-center shadow-lg shadow-emerald-600/25 uppercase">
+              {currentUser.name ? currentUser.name[0] : 'H'}
+            </div>
+            <div>
+              <h3 className="text-xl font-black text-slate-800">{currentUser.name || 'Chef'}</h3>
+              <p className="text-xs text-slate-400">{currentUser.email}</p>
+              <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-bold shadow-sm">
+                <Award className="w-3.5 h-3.5 text-amber-500" />
+                <span>Premium Member</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-emerald-950/5 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center font-bold text-xl">
+              👤
+            </div>
+            <div>
+              <h3 className="text-lg font-black text-slate-800">Guest Kitchen Account</h3>
+              <p className="text-xs text-slate-400">Log in to sync groceries across devices & enable notifications</p>
+            </div>
+          </div>
+          <button
+            onClick={onOpenAuth}
+            className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs px-5 py-2.5 rounded-2xl shadow-lg shadow-emerald-600/20 active:scale-95 transition"
+          >
+            <LogIn className="w-4 h-4" />
+            <span>Sign In / Register</span>
+          </button>
+        </div>
+      )}
 
       {/* Impact Stats Banner */}
       <div className="grid grid-cols-2 gap-4">
@@ -63,7 +84,7 @@ export default function ProfileTab({ itemsCount = 0, usedCount = 0 }) {
         </div>
       </div>
 
-      {/* Settings Navigation List (Matching Mockup) */}
+      {/* Settings Navigation List */}
       <div className="bg-white rounded-3xl border border-emerald-950/5 shadow-sm divide-y divide-slate-100 overflow-hidden">
         {menuOptions.map((opt, idx) => {
           const Icon = opt.icon;
@@ -82,14 +103,24 @@ export default function ProfileTab({ itemsCount = 0, usedCount = 0 }) {
         })}
       </div>
 
-      {/* Log Out Button (Matching Mockup) */}
-      <button
-        onClick={() => alert('Log out clicked')}
-        className="w-full py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-sm flex items-center justify-center gap-2 border border-rose-200/60 transition active:scale-95"
-      >
-        <LogOut className="w-4 h-4" />
-        <span>Log Out</span>
-      </button>
+      {/* Auth Action Button */}
+      {currentUser ? (
+        <button
+          onClick={onLogout}
+          className="w-full py-3.5 rounded-2xl bg-rose-50 hover:bg-rose-100 text-rose-600 font-bold text-sm flex items-center justify-center gap-2 border border-rose-200/60 transition active:scale-95"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>Log Out ({currentUser.email})</span>
+        </button>
+      ) : (
+        <button
+          onClick={onOpenAuth}
+          className="w-full py-3.5 rounded-2xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-sm flex items-center justify-center gap-2 border border-emerald-200/60 transition active:scale-95"
+        >
+          <LogIn className="w-4 h-4" />
+          <span>Sign In to Your Account</span>
+        </button>
+      )}
 
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Calendar, Check, Camera, ScanBarcode, ArrowRight } from 'lucide-react';
-import { getShelfLifeSuggestions, estimateItemExpiry, createItem } from '../../api';
+import { Sparkles, Calendar, Check, Camera, ScanBarcode, ArrowRight, Image as ImageIcon } from 'lucide-react';
+import { getShelfLifeSuggestions, estimateItemExpiry, createItem, uploadGroceryPhoto } from '../../api';
 import confetti from 'canvas-confetti';
 
 export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = null }) {
@@ -13,6 +13,8 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
   const [expiryDate, setExpiryDate] = useState('');
   const [alertDate, setAlertDate] = useState('');
   const [price, setPrice] = useState('');
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [expirySource, setExpirySource] = useState('manual');
   const [estimateDetails, setEstimateDetails] = useState(null);
 
@@ -22,6 +24,8 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+
+  const fileInputRef = useRef(null);
 
   // Smart storage detector: Atta, Dal, Rice, Potatoes, Onions belong in room/pantry!
   const getSmartLocation = (itemName, cat) => {
@@ -40,6 +44,7 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
     if (initialData) {
       setName(initialData.name || '');
       setCategory(initialData.category || 'dairy');
+      if (initialData.image) setPhotoUrl(initialData.image);
       const smartLoc = getSmartLocation(initialData.name, initialData.category);
       setLocation(smartLoc);
       if (initialData.price) setPrice(initialData.price);
@@ -88,10 +93,26 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
     setCategory(sug.category);
     setShowSuggestions(false);
 
-    // Auto-detect whether it belongs in dry pantry or fridge!
     const smartLoc = getSmartLocation(sug.name, sug.category);
     setLocation(smartLoc);
     runAutoEstimate(sug.name, smartLoc, purchaseDate);
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingPhoto(true);
+    setError('');
+
+    try {
+      const url = await uploadGroceryPhoto(file);
+      setPhotoUrl(url);
+    } catch (err) {
+      setError('Photo upload failed: ' + err.message);
+    } finally {
+      setUploadingPhoto(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -108,6 +129,7 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
       await createItem({
         name: name.trim(),
         category: category || 'general',
+        photo_url: photoUrl || null,
         location,
         purchase_date: purchaseDate || null,
         expiry_date: expiryDate || null,
@@ -127,6 +149,7 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
       setTimeout(() => setSuccessMsg(''), 4000);
 
       setName('');
+      setPhotoUrl('');
       setExpiryDate('');
       setAlertDate('');
       setPrice('');
@@ -184,22 +207,51 @@ export default function AddItemTab({ onItemAdded, onOpenBarcode, initialData = n
       {/* Main Form Card */}
       <form onSubmit={handleSubmit} className="bg-white p-6 sm:p-8 rounded-3xl border border-emerald-950/5 shadow-sm space-y-5">
         
-        {/* Photo / Emoji Avatar Box */}
+        {/* Photo / Emoji Avatar Box with live photo upload */}
         <div className="flex items-center gap-5 p-4 rounded-2xl bg-slate-50 border border-slate-100">
-          <div className="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center text-4xl shrink-0">
-            {getEmoji()}
-          </div>
+          {photoUrl ? (
+            <img
+              src={photoUrl}
+              alt="Grocery item"
+              className="w-20 h-20 rounded-2xl object-cover bg-white shadow-sm border border-slate-200 shrink-0"
+            />
+          ) : (
+            <div className="w-20 h-20 rounded-2xl bg-white shadow-sm flex items-center justify-center text-4xl shrink-0">
+              {getEmoji()}
+            </div>
+          )}
+
           <div>
-            <h4 className="text-sm font-bold text-slate-800">Visual Item Tag</h4>
-            <p className="text-xs text-slate-400 mt-0.5">Auto-updates based on item name</p>
-            <button
-              type="button"
-              onClick={onOpenBarcode}
-              className="mt-2 text-xs font-bold text-emerald-700 bg-emerald-100/70 hover:bg-emerald-100 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5"
-            >
-              <ScanBarcode className="w-3.5 h-3.5" />
-              <span>Or Scan Barcode</span>
-            </button>
+            <h4 className="text-sm font-bold text-slate-800">Item Photo / Image</h4>
+            <p className="text-xs text-slate-400 mt-0.5">Upload a picture or use auto-detected emoji</p>
+            
+            <div className="mt-2.5 flex items-center gap-2">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingPhoto}
+                className="text-xs font-bold text-emerald-800 bg-emerald-100 hover:bg-emerald-200/80 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 active:scale-95 disabled:opacity-50"
+              >
+                <Camera className="w-3.5 h-3.5 text-emerald-700" />
+                <span>{uploadingPhoto ? 'Uploading...' : photoUrl ? 'Change Photo' : 'Upload Photo'}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={onOpenBarcode}
+                className="text-xs font-bold text-slate-700 bg-slate-200 hover:bg-slate-300 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 active:scale-95"
+              >
+                <ScanBarcode className="w-3.5 h-3.5 text-slate-600" />
+                <span>Scan Barcode</span>
+              </button>
+            </div>
           </div>
         </div>
 
