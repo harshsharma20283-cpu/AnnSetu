@@ -8,6 +8,7 @@ const itemsRouter = require("./routes/items");
 const shelfLifeRouter = require("./routes/shelfLife");
 const authRouter = require("./routes/auth");
 const uploadRouter = require("./routes/upload");
+const aiRouter = require("./routes/ai");
 const { initCron } = require("./utils/cron");
 
 const app = express();
@@ -41,6 +42,7 @@ app.use("/auth", authRouter);
 app.use("/items", itemsRouter);
 app.use("/shelf-life", shelfLifeRouter);
 app.use("/upload", uploadRouter);
+app.use("/ai", aiRouter);
 
 // Start Automated Daily Expiry Cron Job
 initCron();

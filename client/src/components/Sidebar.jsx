@@ -8,10 +8,12 @@ import {
   User, 
   Leaf,
   ChevronRight,
-  LogIn
+  LogIn,
+  Sparkles,
+  Bot
 } from 'lucide-react';
 
-export default function Sidebar({ activeTab, setActiveTab, expiringCount, currentUser, onOpenAuth }) {
+export default function Sidebar({ activeTab, setActiveTab, expiringCount, currentUser, onOpenAuth, onOpenAiChef }) {
   const menuItems = [
     { id: 'home', label: 'Home', icon: Home },
     { id: 'fridge', label: 'My Pantry', icon: Layers },
@@ -69,6 +71,31 @@ export default function Sidebar({ activeTab, setActiveTab, expiringCount, curren
             );
           })}
         </nav>
+
+        {/* AI Chef Quick Access Banner in Sidebar */}
+        {onOpenAiChef && (
+          <div className="mt-4 p-3.5 rounded-2xl bg-gradient-to-br from-emerald-500/10 via-teal-500/10 to-emerald-500/5 border border-emerald-500/20">
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs">
+                👩‍🍳
+              </div>
+              <span className="text-xs font-bold text-slate-800">AI Assistant</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[9px] font-extrabold bg-emerald-100 text-emerald-800 ml-auto">
+                NEW
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500 mb-2 leading-tight">
+              Ask recipes & zero-waste hacks for your fridge.
+            </p>
+            <button
+              onClick={onOpenAiChef}
+              className="w-full py-1.5 px-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold transition flex items-center justify-center gap-1.5 shadow-xs"
+            >
+              <Sparkles className="w-3 h-3 text-amber-300" />
+              <span>Chat with Chef</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* User Profile Card */}

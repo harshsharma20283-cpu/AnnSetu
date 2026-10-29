@@ -188,3 +188,23 @@ export async function lookupBarcode(barcode) {
     quantity: p.quantity || '',
   };
 }
+
+export async function generateAiRecipes({ items = [], expiringItems = [], dietPreference = 'all' }) {
+  const res = await fetch(`${API_BASE}/ai/recipes`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ items, expiringItems, dietPreference }),
+  });
+  if (!res.ok) throw new Error('Failed to generate AI recipes');
+  return res.json();
+}
+
+export async function chatWithAiChef({ message, history = [], items = [], expiringItems = [] }) {
+  const res = await fetch(`${API_BASE}/ai/chat`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ message, history, items, expiringItems }),
+  });
+  if (!res.ok) throw new Error('Failed to reach AI Chef');
+  return res.json();
+}
