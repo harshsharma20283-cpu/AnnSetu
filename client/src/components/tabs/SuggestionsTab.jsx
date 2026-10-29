@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Sparkles, Utensils, CheckCircle2, ShoppingCart, Leaf, Clock, ArrowRight, Bot, ChefHat } from 'lucide-react';
 import { getSmartRecipes } from '../../utils/recipeEngine';
 
-export default function SuggestionsTab({ items = [], onOpenCook, onOpenAdd, onOpenAiChef }) {
+export default function SuggestionsTab({ items = [], onOpenCook, onOpenAdd }) {
   const expiringSoon = items.filter((i) => i.daysLeft !== null && i.daysLeft <= 3);
 
   // Dynamic top recipe based on actual user fridge items
@@ -36,14 +36,14 @@ export default function SuggestionsTab({ items = [], onOpenCook, onOpenAdd, onOp
           </p>
         </div>
 
-        {/* AI Chef Quick Trigger Button */}
-        {onOpenAiChef && (
+        {/* Open Cook Today Recipes */}
+        {onOpenCook && (
           <button
-            onClick={onOpenAiChef}
+            onClick={onOpenCook}
             className="self-start sm:self-auto px-4 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-emerald-600/20 active:scale-95 transition"
           >
-            <Bot className="w-4 h-4 text-emerald-200" />
-            <span>Chat with AI Chef</span>
+            <Utensils className="w-4 h-4 text-emerald-200" />
+            <span>Rescue Recipes</span>
           </button>
         )}
       </div>

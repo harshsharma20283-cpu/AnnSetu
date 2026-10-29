@@ -16,8 +16,6 @@ import ProfileTab from './components/tabs/ProfileTab';
 import CookTodayModal from './components/CookTodayModal';
 import BarcodeLookupModal from './components/BarcodeLookupModal';
 import AuthModal from './components/AuthModal';
-import AiAssistantModal from './components/AiAssistantModal';
-import { Bot, Sparkles } from 'lucide-react';
 
 import { 
   fetchItems, 
@@ -41,7 +39,6 @@ export default function App() {
   const [isCookOpen, setIsCookOpen] = useState(false);
   const [isBarcodeOpen, setIsBarcodeOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isAiChefOpen, setIsAiChefOpen] = useState(false);
   const [barcodeScannedData, setBarcodeScannedData] = useState(null);
 
   const dashboardRef = useRef(null);
@@ -181,7 +178,6 @@ export default function App() {
           expiringCount={expiringCount}
           currentUser={currentUser}
           onOpenAuth={() => setIsAuthOpen(true)}
-          onOpenAiChef={() => setIsAiChefOpen(true)}
         />
 
         {/* Content Area */}
@@ -201,7 +197,6 @@ export default function App() {
               scrollToDashboard();
             }}
             onOpenFridge3D={scrollToHero}
-            onOpenAiChef={() => setIsAiChefOpen(true)}
             currentUser={currentUser}
             onOpenAuth={() => setIsAuthOpen(true)}
             onNavigateProfile={() => {
@@ -270,7 +265,6 @@ export default function App() {
                   <SuggestionsTab
                     items={filteredItems}
                     onOpenCook={() => setIsCookOpen(true)}
-                    onOpenAiChef={() => setIsAiChefOpen(true)}
                     onOpenAdd={() => {
                       setActiveTab('add');
                       scrollToDashboard();
@@ -326,32 +320,6 @@ export default function App() {
           loadData();
         }}
       />
-
-      <AiAssistantModal
-        isOpen={isAiChefOpen}
-        onClose={() => setIsAiChefOpen(false)}
-        items={items}
-        onMarkUsed={handleMarkUsed}
-      />
-
-      {/* 5. Floating AnnSetu AI Chef Assistant Trigger */}
-      <button
-        onClick={() => setIsAiChefOpen(true)}
-        title="Ask AnnSetu AI Chef"
-        className="fixed bottom-20 md:bottom-8 right-5 z-40 flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-xl shadow-emerald-700/30 hover:shadow-emerald-700/50 hover:scale-105 active:scale-95 transition-all group border border-white/20 backdrop-blur-xs cursor-pointer"
-      >
-        <div className="relative">
-          <div className="w-6 h-6 flex items-center justify-center">
-            <Bot className="w-5 h-5 text-white group-hover:rotate-12 transition-transform" />
-          </div>
-          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 border-emerald-700 animate-ping" />
-          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-amber-400 border-2 border-emerald-700" />
-        </div>
-        <span className="text-xs font-black tracking-tight hidden sm:inline">Ask AI Chef</span>
-        <span className="text-[10px] font-bold bg-white/20 px-2 py-0.5 rounded-full backdrop-blur-xs">
-          ✨ AI
-        </span>
-      </button>
 
     </div>
   );
