@@ -190,6 +190,12 @@ export default function App() {
             serverStatus={serverOnline}
             onToggleMobileNav={() => setActiveTab('home')}
             expiringCount={expiringCount}
+            items={items}
+            onMarkUsed={handleMarkUsed}
+            onNavigate={(tab) => {
+              setActiveTab(tab);
+              scrollToDashboard();
+            }}
             onOpenFridge3D={scrollToHero}
             currentUser={currentUser}
             onOpenAuth={() => setIsAuthOpen(true)}

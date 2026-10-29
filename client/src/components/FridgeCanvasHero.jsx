@@ -277,12 +277,6 @@ export default function FridgeCanvasHero({ onScrollToDashboard }) {
               </div>
             </div>
           </div>
-
-          {/* Frame Progress Indicator */}
-          <div className="flex items-center gap-2 bg-slate-950/75 backdrop-blur-md border border-white/15 px-4 py-2 rounded-2xl text-xs font-mono text-white shadow-xl">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Frame: {currentFrame}/{TOTAL_FRAMES}</span>
-          </div>
         </div>
 
       </div>
