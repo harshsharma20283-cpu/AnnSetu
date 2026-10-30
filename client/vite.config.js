@@ -8,6 +8,9 @@ export default defineConfig({
     proxy: {
       '/items': 'http://localhost:5000',
       '/shelf-life': 'http://localhost:5000',
+      '/auth': 'http://localhost:5000',
+      '/upload': 'http://localhost:5000',
+      '/ai': 'http://localhost:5000',
       '/test-db': 'http://localhost:5000',
     },
   },

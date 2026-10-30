@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs");
 require("dotenv").config({ path: path.join(__dirname, ".env") });
 require("dotenv").config();
 const express = require("express");
@@ -43,6 +44,25 @@ app.use("/items", itemsRouter);
 app.use("/shelf-life", shelfLifeRouter);
 app.use("/upload", uploadRouter);
 app.use("/ai", aiRouter);
+
+// Serve static React production build if available
+const clientDist = path.join(__dirname, "../client/dist");
+if (fs.existsSync(clientDist)) {
+  app.use(express.static(clientDist));
+  app.get("*", (req, res, next) => {
+    if (
+      req.path.startsWith("/items") ||
+      req.path.startsWith("/auth") ||
+      req.path.startsWith("/shelf-life") ||
+      req.path.startsWith("/upload") ||
+      req.path.startsWith("/ai") ||
+      req.path.startsWith("/test-db")
+    ) {
+      return next();
+    }
+    res.sendFile(path.join(clientDist, "index.html"));
+  });
+}
 
 // Start Automated Daily Expiry Cron Job
 initCron();
