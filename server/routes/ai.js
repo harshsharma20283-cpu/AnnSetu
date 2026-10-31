@@ -24,7 +24,7 @@ router.post('/recipes', async (req, res) => {
     if (openai) {
       try {
         const response = await openai.chat.completions.create({
-          model: 'gpt-4.1-mini',
+          model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
           messages: [
             {
               role: 'system',
@@ -143,7 +143,7 @@ router.post('/chat', async (req, res) => {
     if (openai) {
       try {
         const response = await openai.chat.completions.create({
-          model: 'gpt-4.1-mini',
+          model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
           messages: [
             {
               role: 'system',
