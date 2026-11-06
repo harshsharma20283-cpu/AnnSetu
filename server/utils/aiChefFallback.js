@@ -1,4 +1,4 @@
-// AnnSetu AI Chef (अन्नसेतु शेफ) - Contextual Culinary AI Brain
+// AnnSetu AI Chef (à¤…à¤¨à¥à¤¨à¤¸à¥‡à¤¤à¥ à¤¶à¥‡à¤«) - Contextual Culinary AI Brain
 // Provides dynamic, conversational, non-repeating recipe & storage answers tailored to the user's live pantry.
 
 const DISH_CATALOG = [
@@ -7,7 +7,7 @@ const DISH_CATALOG = [
     title: 'Desi Masala French Toast',
     matchKeys: ['egg', 'anda', 'milk', 'doodh', 'bread'],
     time: '10 mins',
-    tag: 'Breakfast Favorite • High Protein',
+    tag: 'Breakfast Favorite â€¢ High Protein',
     description: 'Whisked eggs and warm milk spiced with green chillies, onions, and pan-toasted to golden perfection.',
     steps: [
       'In a wide bowl, whisk 2 eggs with 3 tbsp milk, a pinch of turmeric, salt, and black pepper.',
@@ -21,7 +21,7 @@ const DISH_CATALOG = [
     title: 'Street-Style Anda Paratha Roll',
     matchKeys: ['egg', 'anda', 'atta', 'flour'],
     time: '12 mins',
-    tag: 'Wholesome • Filling Meal',
+    tag: 'Wholesome â€¢ Filling Meal',
     description: 'Crisp layered whole wheat paratha layered with seasoned fluffy spiced egg, rolled up hot.',
     steps: [
       'Roll a thin round roti from your whole wheat atta dough.',
@@ -36,11 +36,11 @@ const DISH_CATALOG = [
     title: 'Creamy Parsi Akuri (Velvety Egg Scramble)',
     matchKeys: ['egg', 'anda', 'milk', 'doodh'],
     time: '8 mins',
-    tag: 'Quick & Creamy • Low Carb',
+    tag: 'Quick & Creamy â€¢ Low Carb',
     description: 'Soft scrambled eggs gently folded with milk and butter for an ultra-velvety texture.',
     steps: [
       'Whisk 2-3 eggs with 4 tbsp milk until frothy. Season with salt and black pepper.',
-      'Melt 1 tbsp butter or heat oil in a pan on medium-low flame. Sauté finely chopped onions and green chillies for 1 minute.',
+      'Melt 1 tbsp butter or heat oil in a pan on medium-low flame. SautÃ© finely chopped onions and green chillies for 1 minute.',
       'Lower flame to low and pour in the egg-milk mixture.',
       'Fold gently with a spatula from edges to center every few seconds. Remove from heat while still glossy and soft (do not overcook!).',
       'Garnish with fresh dhaniya and enjoy with toast or phulkas.'
@@ -51,10 +51,10 @@ const DISH_CATALOG = [
     title: 'Mumbai Dhaba-Style Spicy Anda Bhurji',
     matchKeys: ['egg', 'anda'],
     time: '10 mins',
-    tag: 'Spicy • Classic Street Food',
+    tag: 'Spicy â€¢ Classic Street Food',
     description: 'Hot scrambled eggs cooked with caramelized onions, tomatoes, and pav bhaji masala.',
     steps: [
-      'Heat 1 tbsp oil in a skillet. Sauté chopped onions until golden.',
+      'Heat 1 tbsp oil in a skillet. SautÃ© chopped onions until golden.',
       'Add chopped tomatoes, ginger-garlic paste, and green chillies; cook until mushy.',
       'Add 1/4 tsp turmeric, 1/2 tsp red chilli powder, and 1/2 tsp pav bhaji or garam masala.',
       'Crack 2 eggs directly into the pan. Scramble continuously on medium heat for 3 minutes until fluffy.',
@@ -66,7 +66,7 @@ const DISH_CATALOG = [
     title: 'Creamy Badam-Elaichi Kheer',
     matchKeys: ['milk', 'doodh', 'rice', 'sweet', 'meetha'],
     time: '18 mins',
-    tag: 'Sweet Comfort • Zero-Waste Dairy',
+    tag: 'Sweet Comfort â€¢ Zero-Waste Dairy',
     description: 'Rich slow-simmered milk dessert flavored with crushed cardamom and a touch of sweetness.',
     steps: [
       'Bring 500ml milk to a gentle boil in a heavy saucepan, stirring occasionally.',
@@ -81,7 +81,7 @@ const DISH_CATALOG = [
     title: 'Fresh Homemade Chenna / Soft Paneer',
     matchKeys: ['milk', 'doodh'],
     time: '10 mins',
-    tag: 'Dairy Rescuer • Pure Protein',
+    tag: 'Dairy Rescuer â€¢ Pure Protein',
     description: 'Rescue expiring milk before it sours by curdling it into soft, creamy cottage cheese.',
     steps: [
       'Heat milk in a saucepan until it comes to a full boil.',
@@ -96,7 +96,7 @@ const DISH_CATALOG = [
     title: 'Golden Immunity Latte (Haldi Masala Doodh)',
     matchKeys: ['milk', 'doodh'],
     time: '5 mins',
-    tag: 'Quick Soothing • Bedtime Special',
+    tag: 'Quick Soothing â€¢ Bedtime Special',
     description: 'Warm spiced Indian milk infused with turmeric, ginger, black pepper, and honey.',
     steps: [
       'Pour milk into a saucepan and place over medium flame.',
@@ -124,12 +124,12 @@ const DISH_CATALOG = [
     title: 'Spiced Tawa Bread / Roti Upma',
     matchKeys: ['bread', 'pav', 'roti'],
     time: '8 mins',
-    tag: 'Instant Snack • Zero Waste',
+    tag: 'Instant Snack â€¢ Zero Waste',
     description: 'Transform day-old bread slices or leftover rotis into a tangy, flavorful spiced tawa snack.',
     steps: [
       'Cut bread or tear leftover rotis into small bite-sized pieces.',
       'Heat oil, temper mustard seeds, curry leaves, and green chillies.',
-      'Sauté onions and tomatoes until soft with a pinch of turmeric and salt.',
+      'SautÃ© onions and tomatoes until soft with a pinch of turmeric and salt.',
       'Toss bread pieces into the pan, sprinkle a splash of water, and stir well for 2 minutes.',
       'Finish with fresh lemon juice and chopped coriander.'
     ]
@@ -140,10 +140,10 @@ const DISH_CATALOG = [
     matchKeys: ['paneer', 'panir'],
     time: '12 mins',
     tag: 'High Protein Sabzi',
-    description: 'Crumbled paneer cooked with sautéed onions, tomatoes, green chillies, and garam masala.',
+    description: 'Crumbled paneer cooked with sautÃ©ed onions, tomatoes, green chillies, and garam masala.',
     steps: [
       'Crumble fresh or store paneer into small chunks.',
-      'Heat 1 tbsp oil/ghee, sauté cumin, onions, and chillies for 2 minutes.',
+      'Heat 1 tbsp oil/ghee, sautÃ© cumin, onions, and chillies for 2 minutes.',
       'Add chopped tomatoes, turmeric, chilli powder, and garam masala until fragrant.',
       'Toss paneer chunks for 3 minutes on medium flame. Garnish with coriander and lemon juice.'
     ]
@@ -153,7 +153,7 @@ const DISH_CATALOG = [
     title: 'Zero-Waste Khichdi Comfort Bowl',
     matchKeys: ['rice', 'dal', 'atta'],
     time: '18 mins',
-    tag: 'Healthy Comfort • One-Pot Meal',
+    tag: 'Healthy Comfort â€¢ One-Pot Meal',
     description: 'Wholesome one-pot rice and lentil bowl cooked with whatever vegetables need using up.',
     steps: [
       'Wash equal parts rice and dal (moong or toor).',
@@ -207,19 +207,19 @@ function generateChefReply(message = '', items = [], expiringItems = [], history
     query.includes('spoil')
   ) {
     if (query.includes('milk') || query.includes('doodh')) {
-      return `🥛 **AnnSetu Milk Storage & Preservation Hacks:**\n\n1. **Best Shelf:** Always store milk in the deepest, coldest part of the main fridge shelf (around 2°C–4°C). Avoid the door shelf, which warms up every time the fridge is opened!\n2. **Boiling Rule:** Boil fresh raw milk immediately upon purchase to kill bacteria. Once boiled and cooled, it stays good for 3–4 days.\n3. **Near Expiry?** If milk packet is near expiry, don't let it sour! Curdle it into fresh Chenna/Paneer right away with 1 tbsp lemon juice.`;
+      return `ðŸ¥› **AnnSetu Milk Storage & Preservation Hacks:**\n\n1. **Best Shelf:** Always store milk in the deepest, coldest part of the main fridge shelf (around 2Â°Câ€“4Â°C). Avoid the door shelf, which warms up every time the fridge is opened!\n2. **Boiling Rule:** Boil fresh raw milk immediately upon purchase to kill bacteria. Once boiled and cooled, it stays good for 3â€“4 days.\n3. **Near Expiry?** If milk packet is near expiry, don't let it sour! Curdle it into fresh Chenna/Paneer right away with 1 tbsp lemon juice.`;
     }
     if (query.includes('egg') || query.includes('anda')) {
-      return `🥚 **AnnSetu Egg Care & Freshness Hacks:**\n\n1. **Storage:** Keep eggs in their original carton on a middle fridge shelf (not the door rack) to protect them from temperature fluctuations and odor absorption.\n2. **Shelf Life:** Raw eggs in shells stay fresh for 3–5 weeks in the fridge!\n3. **Quick Float Test:** Put an egg in a bowl of water: if it sinks to the bottom horizontally, it's super fresh. If it stands upright, use it soon. If it floats to the surface, discard it.`;
+      return `ðŸ¥š **AnnSetu Egg Care & Freshness Hacks:**\n\n1. **Storage:** Keep eggs in their original carton on a middle fridge shelf (not the door rack) to protect them from temperature fluctuations and odor absorption.\n2. **Shelf Life:** Raw eggs in shells stay fresh for 3â€“5 weeks in the fridge!\n3. **Quick Float Test:** Put an egg in a bowl of water: if it sinks to the bottom horizontally, it's super fresh. If it stands upright, use it soon. If it floats to the surface, discard it.`;
     }
     if (query.includes('bread') || query.includes('pav')) {
-      return `🍞 **AnnSetu Bread Storage Master Tip:**\n\n1. **Never refrigerate bread!** The fridge cold temperature actually speeds up retrogradation (starch recrystallization), making bread go stale 3x faster!\n2. **Room Temp:** Keep tightly sealed at room temperature in a breadbox for 3–4 days.\n3. **Longer Life:** Sliced bread freezes amazingly for up to 3 months. Pop frozen slices straight into the toaster!`;
+      return `ðŸž **AnnSetu Bread Storage Master Tip:**\n\n1. **Never refrigerate bread!** The fridge cold temperature actually speeds up retrogradation (starch recrystallization), making bread go stale 3x faster!\n2. **Room Temp:** Keep tightly sealed at room temperature in a breadbox for 3â€“4 days.\n3. **Longer Life:** Sliced bread freezes amazingly for up to 3 months. Pop frozen slices straight into the toaster!`;
     }
     if (query.includes('tomato') || query.includes('tamatar')) {
-      return `🍅 **AnnSetu Tomato Care Hack:**\n\nStore unripe or semi-ripe tomatoes at room temperature stem-down! Cold temperatures destroy the flavor compounds and make the texture mealy. Only refrigerate fully ripe, soft tomatoes to prevent mold.`;
+      return `ðŸ… **AnnSetu Tomato Care Hack:**\n\nStore unripe or semi-ripe tomatoes at room temperature stem-down! Cold temperatures destroy the flavor compounds and make the texture mealy. Only refrigerate fully ripe, soft tomatoes to prevent mold.`;
     }
 
-    return `🧊 **AnnSetu Zero-Waste Storage Cheat-Sheet:**\n\n- **Tomatoes & Bananas:** Store at room temperature away from direct sunlight.\n- **Green Dhaniya / Herbs:** Snip stem tips, wrap gently in a dry paper towel, and seal in an airtight container.\n- **Potatoes & Onions:** Keep in dry, cool, well-ventilated baskets—never together, as onions emit ethylene that causes potatoes to sprout!\n- **Dairy & Milk:** Deepest back shelf of the fridge where temperature stays below 4°C.`;
+    return `ðŸ§Š **AnnSetu Zero-Waste Storage Cheat-Sheet:**\n\n- **Tomatoes & Bananas:** Store at room temperature away from direct sunlight.\n- **Green Dhaniya / Herbs:** Snip stem tips, wrap gently in a dry paper towel, and seal in an airtight container.\n- **Potatoes & Onions:** Keep in dry, cool, well-ventilated basketsâ€”never together, as onions emit ethylene that causes potatoes to sprout!\n- **Dairy & Milk:** Deepest back shelf of the fridge where temperature stays below 4Â°C.`;
   }
 
   // 2. Substitutions queries
@@ -230,46 +230,78 @@ function generateChefReply(message = '', items = [], expiringItems = [], history
     query.includes('badle') || 
     query.includes('replace')
   ) {
-    return `🔄 **Smart Indian Kitchen Substitutions:**\n\n- **Heavy Cream / Malai:** Whisk 3/4 cup full-fat milk with 1/4 cup melted butter, or use smooth whisked fresh curd.\n- **Eggs (in baking/pancakes):** 1/4 cup whisked dahi (curd) OR 1/2 mashed ripe banana per egg.\n- **Buttermilk (Chaas):** 2 tbsp curd + 1/2 cup cold water + pinch of salt & roasted jeera.\n- **Tomato in Gravy:** 2 tbsp whisked curd (dahi) or 1 tsp amchur (dry mango powder) for natural tanginess.\n- **Cornstarch / Thickener:** 1 tbsp roasted besan or atta dissolved in water.`;
+    return `ðŸ”„ **Smart Indian Kitchen Substitutions:**\n\n- **Heavy Cream / Malai:** Whisk 3/4 cup full-fat milk with 1/4 cup melted butter, or use smooth whisked fresh curd.\n- **Eggs (in baking/pancakes):** 1/4 cup whisked dahi (curd) OR 1/2 mashed ripe banana per egg.\n- **Buttermilk (Chaas):** 2 tbsp curd + 1/2 cup cold water + pinch of salt & roasted jeera.\n- **Tomato in Gravy:** 2 tbsp whisked curd (dahi) or 1 tsp amchur (dry mango powder) for natural tanginess.\n- **Cornstarch / Thickener:** 1 tbsp roasted besan or atta dissolved in water.`;
   }
 
   // 3. Sweet / Dessert cravings
   if (query.includes('sweet') || query.includes('meetha') || query.includes('dessert') || query.includes('kheer')) {
     const kheer = DISH_CATALOG.find(d => d.id === 'rice_seviyan_kheer');
-    return `🍮 **Craving something sweet? Here's a quick treat:**\n\n### **${kheer.title}** (${kheer.time})\n${kheer.description}\n\n**Quick Method:**\n${kheer.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Zero-waste tip: Uses your fresh milk before it expires!*`;
+    return `ðŸ® **Craving something sweet? Here's a quick treat:**\n\n### **${kheer.title}** (${kheer.time})\n${kheer.description}\n\n**Quick Method:**\n${kheer.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Zero-waste tip: Uses your fresh milk before it expires!*`;
   }
 
   // 4. Quick 5-min or 10-min snacks
   if (query.includes('quick') || query.includes('fast') || query.includes('jaldi') || query.includes('10 min') || query.includes('5 min') || query.includes('snack')) {
     const akuri = DISH_CATALOG.find(d => d.id === 'creamy_akuri') || chosenDish;
-    return `⚡ **Super Fast 8-Minute Fix:**\n\n### **${akuri.title}** (${akuri.time})\n${akuri.description}\n\n**Steps:**\n${akuri.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Tip: Pairs great with warm toast or rotis!*`;
+    return `âš¡ **Super Fast 8-Minute Fix:**\n\n### **${akuri.title}** (${akuri.time})\n${akuri.description}\n\n**Steps:**\n${akuri.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Tip: Pairs great with warm toast or rotis!*`;
   }
 
   // 5. Specific Recipe or Ingredient inquiries
   if (query.includes('french toast')) {
     const ft = DISH_CATALOG.find(d => d.id === 'french_toast');
-    return `🍳 **Here is the step-by-step for ${ft.title}:**\n\n${ft.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Chef Secret: Whisking milk into the eggs makes the bread custardy and soft inside while staying golden crisp outside!*`;
+    return `ðŸ³ **Here is the step-by-step for ${ft.title}:**\n\n${ft.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Chef Secret: Whisking milk into the eggs makes the bread custardy and soft inside while staying golden crisp outside!*`;
   }
   if (query.includes('bhurji') || query.includes('akuri')) {
     const bhurji = DISH_CATALOG.find(d => d.id === 'mumbai_anda_bhurji');
-    return `🍳 **Step-by-step for ${bhurji.title}:**\n\n${bhurji.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Serve hot with buttered pav or warm phulkas!*`;
+    return `ðŸ³ **Step-by-step for ${bhurji.title}:**\n\n${bhurji.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Serve hot with buttered pav or warm phulkas!*`;
   }
+  // Specific dish requests must be checked before generic paneer handling.
+  if (
+    query.includes('paneer masala') ||
+    query.includes('masala paneer')
+  ) {
+    return `## Paneer Masala
+
+**Time:** 25-30 minutes | Vegetarian
+
+### Ingredients
+- 250 g paneer, cut into cubes
+- 2 onions, finely chopped
+- 2 tomatoes, pureed
+- 1 tsp ginger-garlic paste
+- 2 tbsp oil or butter
+- 1/2 tsp turmeric
+- 1 tsp red chilli powder
+- 1 tsp coriander powder
+- 1/2 tsp garam masala
+- Salt and water as needed
+- Optional: cream and fresh coriander
+
+### Cooking Steps
+1. Heat oil in a pan and saute the onions until golden.
+2. Add ginger-garlic paste and cook for 30-60 seconds.
+3. Add tomato puree, turmeric, chilli powder, coriander powder and salt.
+4. Cook until the masala thickens and oil begins to separate.
+5. Add a little water and simmer for 5 minutes to make the gravy.
+6. Add paneer cubes and cook gently for 4-5 minutes.
+7. Sprinkle garam masala and garnish with coriander. Serve with roti or rice.`;
+  }
+
   if (query.includes('chenna') || query.includes('paneer')) {
     const ch = DISH_CATALOG.find(d => d.id === 'homemade_paneer');
-    return `🧀 **How to make ${ch.title} from expiring milk:**\n\n${ch.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Don't throw away the leftover whey water—use it to knead roti atta for extra-soft rotis!*`;
+    return `ðŸ§€ **How to make ${ch.title} from expiring milk:**\n\n${ch.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n*Don't throw away the leftover whey waterâ€”use it to knead roti atta for extra-soft rotis!*`;
   }
 
   // 6. Greetings or appreciation
   if (query === 'hi' || query === 'hello' || query === 'hey' || query === 'namaste' || query.startsWith('hello ') || query.startsWith('hi ')) {
-    return `Namaste! 👩‍🍳 I'm ready in your kitchen! You currently have **${itemNames.join(', ')}** in stock (${expiringNames.length > 0 ? `${expiringNames.join(', ')} expiring soon` : 'all fresh'}).\n\nWhat are you in the mood to eat right now? Ask me for breakfast, quick snacks, dinner, or storage hacks!`;
+    return `Namaste! ðŸ‘©â€ðŸ³ I'm ready in your kitchen! You currently have **${itemNames.join(', ')}** in stock (${expiringNames.length > 0 ? `${expiringNames.join(', ')} expiring soon` : 'all fresh'}).\n\nWhat are you in the mood to eat right now? Ask me for breakfast, quick snacks, dinner, or storage hacks!`;
   }
   if (query.includes('thank') || query.includes('dhanyawad') || query.includes('shukriya') || query.includes('good')) {
-    return `Aapka swagat hai! 🌟 Happy cooking and happy zero-waste living! Whenever you need another recipe or kitchen advice, just ask your AnnSetu Chef.`;
+    return `Aapka swagat hai! ðŸŒŸ Happy cooking and happy zero-waste living! Whenever you need another recipe or kitchen advice, just ask your AnnSetu Chef.`;
   }
 
   // 7. General suggestions ("suggest me something", "kuch batao", "what to cook", "kya banau", "idea", etc.)
   // Generates a rich, non-repetitive dish with steps and offers an alternative
-  return `Namaste! 👩‍🍳 Here is a delicious zero-waste meal you can prepare right now:\n\n### 🍲 **${chosenDish.title}** (${chosenDish.time})\n*${chosenDish.tag}*\n${chosenDish.description}\n\n**Quick Cooking Steps:**\n${chosenDish.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n---\n💡 **Want another option?**\nYou can also make **${alternateDish.title}** (${alternateDish.time}) using your **${itemNames.slice(0, 3).join(', ')}**! Just say *"tell me about ${alternateDish.title}"* or ask for a sweet treat.`;
+  return `Namaste! ðŸ‘©â€ðŸ³ Here is a delicious zero-waste meal you can prepare right now:\n\n### ðŸ² **${chosenDish.title}** (${chosenDish.time})\n*${chosenDish.tag}*\n${chosenDish.description}\n\n**Quick Cooking Steps:**\n${chosenDish.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}\n\n---\nðŸ’¡ **Want another option?**\nYou can also make **${alternateDish.title}** (${alternateDish.time}) using your **${itemNames.slice(0, 3).join(', ')}**! Just say *"tell me about ${alternateDish.title}"* or ask for a sweet treat.`;
 }
 
 module.exports = {
