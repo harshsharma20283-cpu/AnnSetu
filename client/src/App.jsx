@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import FridgeCanvasHero from './components/FridgeCanvasHero';
 import Sidebar from './components/Sidebar';
 import TopBar from './components/TopBar';
@@ -16,6 +16,7 @@ import ProfileTab from './components/tabs/ProfileTab';
 import CookTodayModal from './components/CookTodayModal';
 import BarcodeLookupModal from './components/BarcodeLookupModal';
 import AuthModal from './components/AuthModal';
+import AIChatWidget from './components/AIChatWidget';
 
 import { 
   fetchItems, 
@@ -289,6 +290,9 @@ export default function App() {
 
       </div>
 
+      {/* Floating AnnSetu AI Chef */}
+      <AIChatWidget items={items} />
+
       {/* 3. Mobile Navigation Bar */}
       <MobileBottomNav
         activeTab={activeTab}
@@ -324,3 +328,4 @@ export default function App() {
     </div>
   );
 }
+
